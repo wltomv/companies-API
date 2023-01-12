@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using companies.Data.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace companies_API.Controllers
 {
@@ -7,17 +9,16 @@ namespace companies_API.Controllers
     [ApiController]
     public class CompaniesController : ControllerBase
     {
+        private readonly companiesContext _context;
+
+        public CompaniesController(companiesContext context) => _context = context;
+
         // GET: api/<CompanyController>
         [HttpGet]
-        public async Task<ActionResult<List<string>>> getCompanies()
+        public async Task<ActionResult<List<Company>>> getCompanies()
         {
-            //TODO: temporal data 
-            List<string> companies = new List<string>
-            {
-                "Company 1",
-                "Company 2",
-                "Company 3"
-            };
+            var companies = await _context.Companies.ToListAsync();
+
             return Ok(companies);
         }
     }
